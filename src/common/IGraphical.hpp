@@ -16,10 +16,10 @@ namespace arc
             std::string _message;
 
         public:
-            GraphicalException(const std::string& message);
-            ~GraphicalException();
+            GraphicalException(const std::string& message) noexcept : _message(message) {};
+            ~GraphicalException() noexcept = default;
 
-            const char* what() const noexcept override;
+            const char* what() const noexcept override { return _message.c_str(); };
         };
         
     public:

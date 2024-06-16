@@ -17,7 +17,9 @@ namespace arc {
                 SNAKE_HEAD,
                 SNAKE_BODY,
                 SNAKE_PEBBLE,
-                SNAKE_TAIL
+                SNAKE_TAIL,
+                WALLS,
+                FLOOR_ROOF
             };
             class Sprite {
                 public:
@@ -50,9 +52,10 @@ namespace arc {
         protected:
             Event _direction;
             Event _tempDirection;
-            unsigned _tik;
+            float _tik;
             bool _gameOver;
             std::vector<Sprite> _sprites;
+            bool _noMove;
 
         private:
     };

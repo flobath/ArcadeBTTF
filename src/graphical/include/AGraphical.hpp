@@ -15,12 +15,12 @@ namespace arc
     class AGraphical : public IGraphical
     {
     public:
-        AGraphical();
-        ~AGraphical();
+        AGraphical() = default;
+        ~AGraphical() = default;
 
         virtual std::list<arc::Event>   events() = 0;
         virtual void                    draw(const arc::IScreen& screen) = 0;
-        
+
 
     };
 } // namespace arc

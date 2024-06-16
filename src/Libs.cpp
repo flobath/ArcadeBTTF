@@ -48,8 +48,9 @@ std::unique_ptr<arc::IGame> arc::Libs::open_game_lib(const std::string &lib_path
 std::unique_ptr<arc::IGraphical> arc::Libs::open_graphic_lib(const std::string &lib_path)
 {
     void *handle = dlopen(lib_path.c_str(), RTLD_LAZY);
+    std::cout << lib_path << std::endl;
     if (!handle)
-        throw arc::Libs::LibsException("No such file");
+        throw arc::Libs::LibsException(dlerror());
     void *tmp2 = dlsym(handle, "checkMagic");
     if (!tmp2)
         throw arc::Libs::LibsException("Library open failed");

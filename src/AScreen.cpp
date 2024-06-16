@@ -7,7 +7,7 @@
 
 #include "AScreen.hpp"
 
-arc::AScreen::AScreen()
+arc::AScreen::AScreen() : _size(0, 0)
 {
 }
 
@@ -17,10 +17,10 @@ arc::AScreen::~AScreen()
 
 void arc::AScreen::setSize(unsigned int width, unsigned int height)
 {
-    _size = std::make_pair(width, height);
     _tiles.resize(height);
-    for (unsigned int i = 0; i < height; i++)
-        _tiles[i].resize(width);
+    for (auto &line : _tiles)
+        line.resize(width);
+    _size = std::make_pair(width, height);
 }
 
 std::pair<unsigned int, unsigned int> arc::AScreen::getSize() const

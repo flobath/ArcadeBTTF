@@ -26,11 +26,12 @@ arc::Core::Core(const std::string &lib_path) : _libLoader(std::make_unique<arc::
     start = clock();
     while (true) {
         end = clock();
-        elapsed = ((float)end - start) / CLOCKS_PER_SEC;
+        elapsed = ((float)end - start) / (CLOCKS_PER_SEC * 1000);
         _game->update(elapsed, _events);
-        // _events.clear();
-        // _events = _lib->events();
-        // _lib->draw(_screen);
+        _game->draw(_screen);
+        _events.clear();
+        _events = _lib->events();
+        _lib->draw(_screen);
         for (auto &event : _events) {
             if (event == arc::Event::EventExit) {
                 return;
@@ -47,7 +48,9 @@ arc::Core::Core(const std::string &lib_path) : _libLoader(std::make_unique<arc::
                 _lib = _libLoader->open_graphic_lib(lib_path);
             }
         }
-        start = clock();
+        if (elapsed >= 1) {
+            start = clock();
+        }
     }
 }
 
