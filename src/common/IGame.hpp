@@ -2,8 +2,8 @@
 
 #include <list>
 
-#include "common/Enum.hpp"
-#include "common/IScreen.hpp"
+#include "Enum.hpp"
+#include "IScreen.hpp"
 
 namespace arc
 {

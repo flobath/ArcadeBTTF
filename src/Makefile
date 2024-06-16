@@ -7,13 +7,19 @@
 
 NAME = arcade
 
-SRC = # Add your source files here
+
+INCLUDE_FLAGS	=	-I./common -I./core
+
+SRC = Main.cpp \
+	  AScreen.cpp \
+	  Core.cpp \
+	  Libs.cpp \
 
 OBJ = $(SRC:.cpp=.o)
 
 CXX = g++
 
-CXXFLAGS = -Wall -Wextra -Werror
+CXXFLAGS 	=	-std=c++20 -Wall -Wextra -fno-gnu-unique $(INCLUDE_FLAGS) -g -fPIC
 
 all: $(NAME)
 
