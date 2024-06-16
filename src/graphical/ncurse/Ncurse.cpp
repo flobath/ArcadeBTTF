@@ -28,6 +28,7 @@ arc::Ncurse::~Ncurse()
 
 void arc::Ncurse::draw(const IScreen &screen) {
     std::pair<unsigned int, unsigned int> size = screen.getSize();
+    std::string str =  "Exit: ESC | Next Graphical: N | Previous Graphical: P | Next Game: M | Previous Game: L";
     for (unsigned int y = 0; y < size.second; y++) {
         for (unsigned int x = 0; x < size.first; x++) {
             const IScreen::Tile &tile = screen.getTile(x, y);
@@ -40,6 +41,7 @@ void arc::Ncurse::draw(const IScreen &screen) {
             attroff(COLOR_PAIR(color_pair));
         }
     }
+    mvprintw(size.second, 0, str.c_str());
     refresh();
     getch();
 }
@@ -68,6 +70,18 @@ std::list<arc::Event> arc::Ncurse::events() {
                 break;
             case 32:
                 events.push_back(Event::EventAction);
+                break;
+            case 'n':
+                events.push_back(Event::EventNextGraphical);
+                break;
+            case 'p':
+                events.push_back(Event::EventPreviousGraphical);
+                break;
+            case 'm':
+                events.push_back(Event::EventNextGame);
+                break;
+            case 'l':
+                events.push_back(Event::EventPreviousGame);
                 break;
             default:
                 break;

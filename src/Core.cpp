@@ -70,6 +70,8 @@ void arc::Core::get_libs()
 
 void arc::Core::next_graphical()
 {
+    if (_libs.size() == 0)
+        return;
     _lib = _libLoader->open_graphic_lib(_libs[0]);
     _libs.push_back(_libs[0]);
     _libs.erase(_libs.begin());
@@ -77,6 +79,8 @@ void arc::Core::next_graphical()
 
 void arc::Core::next_game()
 {
+    if (_games.size() == 0)
+        return;
     _game = _libLoader->open_game_lib(_games[0]);
     _games.push_back(_games[0]);
     _games.erase(_games.begin());
@@ -84,6 +88,8 @@ void arc::Core::next_game()
 
 void arc::Core::prev_graphical()
 {
+    if (_libs.size() == 0)
+        return;
     _libs.insert(_libs.begin(), _libs[_libs.size() - 1]);
     _libs.pop_back();
     _lib = _libLoader->open_graphic_lib(_libs[_libs.size() - 1]);
@@ -91,6 +97,8 @@ void arc::Core::prev_graphical()
 
 void arc::Core::prev_game()
 {
+    if (_games.size() == 0)
+        return;
     _games.insert(_games.begin(), _games[_games.size() - 1]);
     _games.pop_back();
     _game = _libLoader->open_game_lib(_games[_games.size() - 1]);
