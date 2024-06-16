@@ -10,10 +10,10 @@ NAME	=	arcade_snake.so
 
 CXX		=	g++
 
-CXXFLAGS 	=	-std=c++20 -Wall -Wextra -I../../common -I../abstract -fPIC -fno-gnu-unique
+CXXFLAGS 	=	-std=c++20 -Wall -Wextra -I../../common -I../include -fPIC -fno-gnu-unique
 
 SRC		=	./Snake.cpp \
-            ../../TextSpriteHelper.cpp
+
 OBJ		=	$(SRC:%.cpp=%.o)
 
 all: $(NAME)

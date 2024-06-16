@@ -8,74 +8,51 @@
 #ifndef SNAKE_HPP_
     #define SNAKE_HPP_
 
-    #include "AGame.hpp"
+    #include "../include/AGame.hpp"
 
-namespace arca {
-    class Snake : public AGame<30, 30> {
+namespace arc {
+    class Snake : public AGame {
+        public:
+            enum SpriteId {
+                SNAKE_HEAD,
+                SNAKE_BODY,
+                SNAKE_PEBBLE,
+                SNAKE_TAIL
+            };
+            class Sprite {
+                public:
+                    Sprite(unsigned x, unsigned y, SpriteId id);
+                    ~Sprite();
+
+                    unsigned x;
+                    unsigned y;
+                    SpriteId id;
+            };
         public:
             Snake();
             ~Snake();
 
-            void handleInput(GameInput input) override;
-            void update() override;
+            virtual void update(float elapsed, const std::list<arc::Event>& events);
+            virtual void draw(arc::IScreen& screen);
 
-            std::vector<std::unique_ptr<arca::Sprite>>::iterator getPebble();
-            const GameOutput nextFrame(const GameInput &input) override;
-            const std::list<arca::SpriteId> getUsedSprites() const override;
+            std::vector<Sprite>::iterator getPebble();
 
-            void gameOver();
             bool isPositionFree(unsigned x, unsigned y, SpriteId id);
+            std::pair<unsigned, unsigned> getSpritePosition(std::vector<Sprite>::iterator sprite);
+        
 
             void moveSnake();
             void growSnake();
             void doesntGrowSnake();
 
+            void randomPebble();
+
         protected:
-            unsigned _score;
-            GameInput::Direction _direction;
-            GameInput::Direction _tempDirection;
+            Event _direction;
+            Event _tempDirection;
             unsigned _tik;
             bool _gameOver;
-
-        private:
-    };
-
-    class SnakeSprite : public Sprite {
-        public:
-            SnakeSprite(unsigned x, unsigned y, unsigned num);
-            ~SnakeSprite();
-            unsigned getNum() const;
-        protected:
-
-        private:
-            unsigned _num;
-    };
-
-    class PebbleSprite : public Sprite {
-        public:
-            PebbleSprite();
-            ~PebbleSprite();
-
-        protected:
-
-        private:
-    };
-
-    class BackSprite : public Sprite {
-        public:
-            BackSprite();
-            ~BackSprite();
-
-        protected:
-
-        private:
-    };
-
-    class CharSprites : public Sprite {
-        public:
-            CharSprites(double x, double y, SpriteId type);
-            ~CharSprites();
-        protected:
+            std::vector<Sprite> _sprites;
 
         private:
     };
