@@ -28,16 +28,17 @@ arc::Libs::~Libs()
 std::unique_ptr<arc::IGame> arc::Libs::open_game_lib(const std::string &lib_path)
 {
     void *handle = dlopen(lib_path.c_str(), RTLD_LAZY);
-    if (!handle)
+    if (!handle) {
         throw arc::Libs::LibsException("No such file");
-    void *tmp2 = dlsym(handle, "magicNumber");
+    }
+    void *tmp2 = dlsym(handle, "checkMagic");
     if (!tmp2)
         throw arc::Libs::LibsException("Library open failed");
     auto magicNumber = reinterpret_cast<u_int64_t(*)()>(tmp2);
     _checkMagicNumber = magicNumber;
-    // if (!is_game_lib())
-    //     throw arc::Libs::LibsException("Library is not a game library");
-    void *tmp = dlsym(handle, "getDisplay");
+    if (!is_game_lib())
+        throw arc::Libs::LibsException("Library is not a game library");
+    void *tmp = dlsym(handle, "getGame");
     if (!tmp)
         throw arc::Libs::LibsException("Library open failed");
     auto entryPoint = reinterpret_cast<std::unique_ptr<IGame>(*)()>(tmp);

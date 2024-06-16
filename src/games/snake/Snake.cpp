@@ -10,32 +10,19 @@
 #include <vector>
 #include <memory>
 #include <random>
+#include <iostream>
 #include "Snake.hpp"
 
 arc::Snake::Snake() : AGame()
 {
     _tik = 0;
     _score = 0;
-    _gameOver = false;
-    auto pebble = getPebble();
-    while (!isPositionFree(pebble->x, pebble->y, SNAKE_PEBBLE)) {
-        _sprites.erase(pebble);
-        pebble = getPebble();
-    }
+    randomPebble();
 }
 
 arc::Snake::~Snake()
 {
 }
-
-// void arc::Snake::handleInput(GameInput input)
-// {
-//     if ((input.direction == Event::Down && _direction != Event::Up && _direction != Event::None) ||
-//         (input.direction == Event::Left && _direction != Event::Right) ||
-//         (input.direction == Event::Up && _direction != Event::Down) ||
-//         (input.direction == Event::Right && _direction != Event::Left))
-//         _tempDirection = input.direction;
-// } TODO
 
 std::vector<arc::Snake::Sprite>::iterator arc::Snake::getPebble()
 {
@@ -52,8 +39,14 @@ std::vector<arc::Snake::Sprite>::iterator arc::Snake::getPebble()
 void arc::Snake::update(float elapsed, const std::list<Event> &events)
 {
     (void)elapsed;
-    (void)events;
-    _tik++;
+    if (events.size() > 0) {
+        if ((events.front() == Event::EventDown && _direction != Event::EventUp) ||
+            (events.front() == Event::EventLeft && _direction != Event::EventRight) ||
+            (events.front() == Event::EventUp && _direction != Event::EventDown) ||
+            (events.front() == Event::EventRight && _direction != Event::EventLeft))
+            _tempDirection = events.front();
+    }
+    _tik += static_cast<unsigned>(elapsed);
     if (_tik >= 120 / (_score + 4)) {
         _tik = 0;
         _direction = _tempDirection;
@@ -174,28 +167,6 @@ void arc::Snake::doesntGrowSnake()
         }
     }
 }
-// const arc::GameOutput arc::Snake::nextFrame(const GameInput &input)
-// {
-//     if (input.direction != Event::None) {
-//         handleInput(input);
-//     }
-//     GameOutput output;
-//     if (!_gameOver) {
-//         update();
-//     }
-//     output.gridHeigth = 30;
-//     output.gridWidth = 30;
-//     for (auto& pair : _sprites) {
-//         output.sprites.push_back(*pair);
-//     }
-//     if (_gameOver) {
-//         std::list<Sprite> ids1 = TextSpriteHelper::stringSprites ("game over", 13.5, 10, 10);
-//         std::list<Sprite> ids2 = TextSpriteHelper::stringSprites ("score", 13, 11, 5);
-//         output.sprites.insert(output.sprites.end(), ids1.begin(), ids1.end());
-//         output.sprites.insert(output.sprites.end(), ids2.begin(), ids2.end());
-//     }
-//     return output;
-// }
 
 extern "C" {
     uint64_t checkMagic()
@@ -241,4 +212,23 @@ std::pair<unsigned, unsigned> arc::Snake::getSpritePosition(std::vector<Sprite>:
 
 void arc::Snake::draw(arc::IScreen &screen)
 {
+    for(auto& pair : _sprites) {
+        IScreen::Tile tile;
+        switch (pair.id)
+        {
+        case SNAKE_HEAD:
+            tile.textCharacters = std::make_pair('O', ' ');
+            break;
+        case SNAKE_BODY:
+            tile.textCharacters = std::make_pair('o', ' ');
+            break;
+        case SNAKE_PEBBLE:
+            tile.textCharacters = std::make_pair('X', ' ');
+            break;
+        case SNAKE_TAIL:
+            tile.textCharacters = std::make_pair('o', ' ');
+            break;
+        }
+        screen.setTile(pair.x, pair.y, tile);
+    }
 }
